@@ -1,6 +1,10 @@
 ## Fo76 Inventory and Item Management RESTful Web Service
 
+---
+
 ### Overview 
+
+---
 
 Many applications require the ability to manage collections of items such as equipment. However, inventory systems are often built in a project-specific way, with hardcoded data and limited support for categories and attributes. This makes it difficult to reuse these systems across multiple applications.
 
@@ -10,14 +14,22 @@ The Fo76 Inventory and Item Management API provides a RESTful service that allow
 
 The service provides the following:
 
-GET a list of all armor pieces.
-<br>
-GET a specific armor piece.
-<br>
-GET a current inventory of a specific user.
-<br>
-Search for all top-tier armor pieces.
-<br>
-Add an item.
-<br>
-DELETE an item.
+- GET a list of all armor pieces.
+
+- GET a specific armor piece.
+
+- GET a current inventory of a specific user.
+
+- Search for all top-tier armor pieces.
+
+- Add an item.
+
+- DELETE an item.
+
+---
+
+### Resources
+---
+
+### Service Calls
+---
