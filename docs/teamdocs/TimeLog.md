@@ -1,0 +1,3 @@
+| Week   | Author                      | Task                                                                 | Hours | Notes |
+|--------|-----------------------------|----------------------------------------------------------------------|-------|-------|
+| Week 9 | Emile Morris, Daniel Harmon | Team setup and planning (resume, charter, README, repo, project plan) | 4     | Initial team setup and documentation completed |
