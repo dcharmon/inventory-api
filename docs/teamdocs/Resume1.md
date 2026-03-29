@@ -5,9 +5,9 @@
 
 ## Daniel Harmon
 
-## Emile Morris
-
 ---
+
+## Emile Morris
 
 Location: Madison, WI
 
