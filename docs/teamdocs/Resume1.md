@@ -6,6 +6,7 @@
 ## Daniel Harmon
 
 ## Emile Morris
+
 ---
 
 Location: Madison, WI
@@ -21,9 +22,7 @@ Frameworks & Tools: React, Node.js, RESTful APIs, Git
 
 #### Professional Strengths
 
-Full-Stack Capability: Proficient in using Java for backend logic and React/Node.js for dynamic web experiences.
-
-Local Context: Based in Madison, making me easily available for local collaboration and team meetings.
+Full-Stack Capability: Proficient in using Java for backend logic.
 
 Technical Versatility: Ability to quickly adapt to new libraries and frameworks within the JS and Java ecosystems.
 
