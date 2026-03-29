@@ -16,13 +16,13 @@ The service provides the following:
 
 - GET a list of all armor pieces.
 
-- GET a specific armor piece.
+- GET a specific armor piece, given an armor id.
 
 - GET a current inventory of a specific user.
 
 - Search for all top-tier armor pieces.
 
-- Add an item.
+- Add an armor piece to a specific user.
 
 - DELETE an item.
 
