@@ -5,6 +5,18 @@
 
 ## Daniel Harmon
 
+Location: Des Moines, IA
+
+Major: IT-WEB SOFTWARE DEVELOPER
+
+#### Professional Profile
+
+I am a Software Development student with a focus on backend development and database design.
+
+Languages: Java, SQL
+
+Frameworks & Tools: MySQL, RESTful APIs, Git
+
 ---
 
 ## Emile Morris
