@@ -40,6 +40,7 @@
 - [ ] Return JSON responses
 - [ ] Test endpoints
 - [ ] Handle basic validation/errors
+- [ ] Polishing and confirming all best practices - javadoc, clean code, DRY, KISS, proper restful resource naming, etc.
 
 ## Week 12
 - [x] Team Project Presentation
