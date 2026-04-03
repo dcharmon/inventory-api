@@ -3,6 +3,22 @@
 
 ## Alperen Ozelce
 
+Location: Izmir,Turkiye
+
+Major: IT-WEB SOFTWARE DEVELOPER
+
+#### Professional Profile
+
+I am a Web Software Developer Web Software Developer with experience in Java,
+JavaScript, AWS Cloud, MySQL and related technologies. Seeking to leverage 
+technical skills and problem-solving abilities to contribute to innovative projects and drive impactful solutions in the software development field.
+
+
+Languages: Java, Javascript, SQL, React, Angular, PHP
+
+Frameworks & Tools: Java, JavaScript, AWS Cloud, MySQL, React, Angular, 
+ExpresJS, Git, Hibernate, RESTful APIs, Maven
+
 ## Daniel Harmon
 
 Location: Des Moines, IA
