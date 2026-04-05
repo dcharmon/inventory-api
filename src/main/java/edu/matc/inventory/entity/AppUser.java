@@ -1,8 +1,18 @@
 package edu.matc.inventory.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The type App user.
@@ -27,6 +37,12 @@ public class AppUser {
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private Timestamp createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<UserArmorPiece> armorPieces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Loadout> loadouts = new ArrayList<>();
 
     /**
      * Instantiates a new App user.
@@ -126,5 +142,41 @@ public class AppUser {
      */
     public Timestamp getCreatedAt() {
         return createdAt;
+    }
+
+    /**
+     * Gets armor pieces.
+     *
+     * @return the armor pieces
+     */
+    public List<UserArmorPiece> getArmorPieces() {
+        return armorPieces;
+    }
+
+    /**
+     * Sets armor pieces.
+     *
+     * @param armorPieces the armor pieces
+     */
+    public void setArmorPieces(List<UserArmorPiece> armorPieces) {
+        this.armorPieces = armorPieces;
+    }
+
+    /**
+     * Gets loadouts.
+     *
+     * @return the loadouts
+     */
+    public List<Loadout> getLoadouts() {
+        return loadouts;
+    }
+
+    /**
+     * Sets loadouts.
+     *
+     * @param loadouts the loadouts
+     */
+    public void setLoadouts(List<Loadout> loadouts) {
+        this.loadouts = loadouts;
     }
 }
