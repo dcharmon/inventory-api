@@ -1,10 +1,12 @@
 package edu.matc.inventory.rest;
 
+import edu.matc.inventory.dto.UserArmorPieceDto;
 import edu.matc.inventory.entity.*;
 import edu.matc.inventory.persistence.GenericDao;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/inventories")
@@ -124,28 +126,130 @@ public class InventoryService {
         }
     }
 
+    /**
+     * Returns all armor pieces belonging to a specific user.
+     * <p>
+     * HTTP status codes:
+     * 200 if armor pieces are found,
+     * 204 if the user has no armor pieces,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @return 200 with a list of armor pieces, 204 if none found, 404 if user not found
+     */
     @GET
     @Path("/users/{userId}/inventory/armor")
     @Produces("application/json")
     public Response getUserArmorPieces(@PathParam("userId") int userId) {
-        // TODO - filter by userId
-        return Response.ok().build();
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            List<UserArmorPiece> pieces = userArmorPieceDao.findByPropertyEqual("user", user);
+
+            if (pieces == null || pieces.isEmpty()) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+
+            List<UserArmorPieceDto> dtos = new ArrayList<>();
+            for (UserArmorPiece piece : pieces) {
+                dtos.add(new UserArmorPieceDto(piece));
+            }
+
+            return Response.ok(dtos).build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while fetching armor pieces\"}").build();
+        }
     }
 
+    /**
+     * Adds a new armor piece to a user's inventory.
+     * <p>
+     * HTTP status codes:
+     * 201 if the armor piece was created,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId    the user's id
+     * @param armorPiece the armor piece to add
+     * @return 201 with the created armor piece, 404 if user not found
+     */
     @POST
     @Path("/users/{userId}/inventory/armor")
     @Consumes("application/json")
     @Produces("application/json")
     public Response addArmorPiece(@PathParam("userId") int userId, UserArmorPiece armorPiece) {
-        // TODO
-        return Response.ok().build();
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            armorPiece.setUser(user);
+            int id = userArmorPieceDao.insert(armorPiece);
+            UserArmorPiece created = userArmorPieceDao.getById(id);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(new UserArmorPieceDto(created))
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while adding the armor piece\"}").build();
+        }
     }
 
+    /**
+     * Deletes a specific armor piece from a user's inventory.
+     * <p>
+     * HTTP status codes:
+     * 204 if the armor piece was deleted,
+     * 404 if the user or armor piece does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @param id     the armor piece id
+     * @return 204 on success, 404 if not found
+     */
     @DELETE
     @Path("/users/{userId}/inventory/armor/{id}")
     @Produces("application/json")
     public Response deleteArmorPiece(@PathParam("userId") int userId, @PathParam("id") int id) {
-        // TODO
-        return Response.ok().build();
+        try {
+            UserArmorPiece piece = userArmorPieceDao.getById(id);
+
+            if (piece == null || piece.getUser().getUserId() != userId) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"Armor piece with id " + id + " not found for user " + userId + "\"}")
+                        .build();
+            }
+
+            userArmorPieceDao.delete(piece);
+
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while deleting the armor piece\"}").build();
+        }
     }
 }
