@@ -1,10 +1,12 @@
 package edu.matc.inventory.rest;
 
+import edu.matc.inventory.dto.UserArmorPieceDto;
 import edu.matc.inventory.entity.*;
 import edu.matc.inventory.persistence.GenericDao;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/inventories")
@@ -154,12 +156,15 @@ public class InventoryService {
             List<UserArmorPiece> pieces = userArmorPieceDao.findByPropertyEqual("user", user);
 
             if (pieces == null || pieces.isEmpty()) {
-                return Response
-                        .status(Response.Status.NO_CONTENT)
-                        .build();
+                return Response.status(Response.Status.NO_CONTENT).build();
             }
 
-            return Response.ok(pieces).build();
+            List<UserArmorPieceDto> dtos = new ArrayList<>();
+            for (UserArmorPiece piece : pieces) {
+                dtos.add(new UserArmorPieceDto(piece));
+            }
+
+            return Response.ok(dtos).build();
 
         } catch (Exception e) {
             return Response.serverError()
