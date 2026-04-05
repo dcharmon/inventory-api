@@ -35,6 +35,8 @@ public class ArmorBaseResistance {
     @Column(name = "cryo_resistance", nullable = false)
     private int cryoResistance;
 
+    public ArmorBaseResistance() {}
+
     /**
      * Gets id.
      *
