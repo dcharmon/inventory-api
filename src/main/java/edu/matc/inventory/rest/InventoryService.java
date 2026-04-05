@@ -172,13 +172,47 @@ public class InventoryService {
         }
     }
 
+    /**
+     * Adds a new armor piece to a user's inventory.
+     * <p>
+     * HTTP status codes:
+     * 201 if the armor piece was created,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId    the user's id
+     * @param armorPiece the armor piece to add
+     * @return 201 with the created armor piece, 404 if user not found
+     */
     @POST
     @Path("/users/{userId}/inventory/armor")
     @Consumes("application/json")
     @Produces("application/json")
     public Response addArmorPiece(@PathParam("userId") int userId, UserArmorPiece armorPiece) {
-        // TODO
-        return Response.ok().build();
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            armorPiece.setUser(user);
+            int id = userArmorPieceDao.insert(armorPiece);
+            UserArmorPiece created = userArmorPieceDao.getById(id);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(new UserArmorPieceDto(created))
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while adding the armor piece\"}").build();
+        }
     }
 
     @DELETE
