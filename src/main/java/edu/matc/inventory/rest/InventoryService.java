@@ -51,12 +51,12 @@ public class InventoryService {
      * <p>
      * HTTP status codes:
      * 200 if a specific armor type id was found,
-     * 204 if a specific armor type id is NOT found.
+     * 404 if a specific armor type id is NOT found.
      * <p>
      * Exception handling: if a DB error occurs, return 500.
      *
      * @param id armor type id.
-     * @return 200 with the armor type, 204 if the armor type is not found.
+     * @return 200 with the armor type, 404 if the armor type is not found.
      */
     @GET
     @Path("/armor-types/{id}")
@@ -68,7 +68,8 @@ public class InventoryService {
 
             if (type == null) {
                 return Response
-                        .status(Response.Status.NO_CONTENT)
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"Armor type with id " + id + " does not exist\"}")
                         .build();
             }
 
