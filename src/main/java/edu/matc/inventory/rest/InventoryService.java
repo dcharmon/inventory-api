@@ -32,7 +32,6 @@ public class InventoryService {
             GenericDao<ArmorType> armorTypeDao = new GenericDao<>(ArmorType.class);
             List<ArmorType> type = armorTypeDao.getAll();
 
-            // Should return 204 if no armor types are found
             if (type == null || type.isEmpty()) {
                 return Response
                         .status(Response.Status.NO_CONTENT)
@@ -42,6 +41,40 @@ public class InventoryService {
             return Response.ok(type).build();
 
         } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while fetching armor types\"}").build();
+        }
+    }
+
+    /**
+     * Returns a specific armor type by id.
+     * <p>
+     * HTTP status codes:
+     * 200 if a specific armor type id was found,
+     * 204 if a specific armor type id is NOT found.
+     * <p>
+     * Exception handling: if a DB error occurs, return 500.
+     *
+     * @param id armor type id.
+     * @return 200 with the armor type, 204 if the armor type is not found.
+     */
+    @GET
+    @Path("/armor-types/{id}")
+    @Produces("application/json")
+    public Response getSpecificArmorType(@PathParam("id") int id) {
+        try {
+            GenericDao<ArmorType> armorTypeDao = new GenericDao<>(ArmorType.class);
+            ArmorType type = armorTypeDao.getById(id);
+
+            if (type == null) {
+                return Response
+                        .status(Response.Status.NO_CONTENT)
+                        .build();
+            }
+
+            return Response.ok(type).build();
+
+        } catch(Exception e) {
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching armor types\"}").build();
         }
