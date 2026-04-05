@@ -124,12 +124,47 @@ public class InventoryService {
         }
     }
 
+    /**
+     * Returns all armor pieces belonging to a specific user.
+     * <p>
+     * HTTP status codes:
+     * 200 if armor pieces are found,
+     * 204 if the user has no armor pieces,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @return 200 with a list of armor pieces, 204 if none found, 404 if user not found
+     */
     @GET
     @Path("/users/{userId}/inventory/armor")
     @Produces("application/json")
     public Response getUserArmorPieces(@PathParam("userId") int userId) {
-        // TODO - filter by userId
-        return Response.ok().build();
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            List<UserArmorPiece> pieces = userArmorPieceDao.findByPropertyEqual("user", user);
+
+            if (pieces == null || pieces.isEmpty()) {
+                return Response
+                        .status(Response.Status.NO_CONTENT)
+                        .build();
+            }
+
+            return Response.ok(pieces).build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while fetching armor pieces\"}").build();
+        }
     }
 
     @POST

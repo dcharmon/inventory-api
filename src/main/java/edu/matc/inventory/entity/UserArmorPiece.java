@@ -1,5 +1,6 @@
 package edu.matc.inventory.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class UserArmorPiece {
     @Column(name = "user_armor_piece_id")
     private int id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
@@ -51,6 +53,7 @@ public class UserArmorPiece {
     @JoinColumn(name = "star4_effect_id")
     private LegendaryEffect star4Effect;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "armorPieces", fetch = FetchType.EAGER)
     private List<Loadout> loadouts = new ArrayList<>();
 

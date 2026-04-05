@@ -27,7 +27,7 @@
     <junit-vintage-version>4.12.0</junit-vintage-version>
     <jupiter-version>5.0.0</jupiter-version>
 
-    <jackson-verison>2.15.2</jackson-verison>
+    <jackson-version>2.15.2</jackson-version>
 
     <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
     <maven-surefire-plugin-version>2.19</maven-surefire-plugin-version>
@@ -102,19 +102,19 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson-verison}</version>
+      <version>${jackson-version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson-verison}</version>
+      <version>${jackson-version}</version>
     </dependency>
 
     <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-annotations</artifactId>
-    <version>${jackson-verison}</version>
+    <version>${jackson-version}</version>
     </dependency>
 
     <!-- ========================= -->
@@ -179,6 +179,12 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${jupiter-version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson-version}</version>
     </dependency>
 
   </dependencies>

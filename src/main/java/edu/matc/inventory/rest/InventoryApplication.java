@@ -12,6 +12,7 @@ public class InventoryApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(InventoryService.class);
+        classes.add(ObjectMapperContextResolver.class);
         return classes;
     }
 }
