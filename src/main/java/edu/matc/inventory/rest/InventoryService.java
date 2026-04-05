@@ -215,11 +215,41 @@ public class InventoryService {
         }
     }
 
+    /**
+     * Deletes a specific armor piece from a user's inventory.
+     * <p>
+     * HTTP status codes:
+     * 204 if the armor piece was deleted,
+     * 404 if the user or armor piece does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @param id     the armor piece id
+     * @return 204 on success, 404 if not found
+     */
     @DELETE
     @Path("/users/{userId}/inventory/armor/{id}")
     @Produces("application/json")
     public Response deleteArmorPiece(@PathParam("userId") int userId, @PathParam("id") int id) {
-        // TODO
-        return Response.ok().build();
+        try {
+            UserArmorPiece piece = userArmorPieceDao.getById(id);
+
+            if (piece == null || piece.getUser().getUserId() != userId) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"Armor piece with id " + id + " not found for user " + userId + "\"}")
+                        .build();
+            }
+
+            userArmorPieceDao.delete(piece);
+
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while deleting the armor piece\"}").build();
+        }
     }
 }
