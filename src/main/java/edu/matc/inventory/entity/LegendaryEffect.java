@@ -26,6 +26,8 @@ public class LegendaryEffect {
     @Column(name = "armor_category", nullable = false)
     private String armorCategory;
 
+    public LegendaryEffect() {}
+
     /**
      * Gets id.
      *

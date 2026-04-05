@@ -105,6 +105,23 @@ public class GenericDao<T> {
     }
 
     /**
+     * Finds entities by a property equal to a given value.
+     *
+     * @param propertyName the property name to filter by
+     * @param value the value to match
+     * @return list of entities matching the criteria
+     */
+    public List<T> findByPropertyEqual(String propertyName, Object value) {
+        return executeWithSession(session -> {
+            HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = builder.createQuery(type);
+            var root = query.from(type);
+            query.select(root).where(builder.equal(root.get(propertyName), value));
+            return session.createSelectionQuery(query).getResultList();
+        });
+    }
+
+    /**
      * Wraps a database operation within a Hibernate session and transaction.
      * This method ensures that the transaction is committed on success,
      * rolled back on failure, and the session is always closed.

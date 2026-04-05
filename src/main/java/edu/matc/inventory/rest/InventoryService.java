@@ -52,6 +52,7 @@ public class InventoryService {
      * HTTP status codes:
      * 200 if a specific armor type id was found,
      * 404 if a specific armor type id is NOT found.
+     *
      * <p>
      * Exception handling: if a DB error occurs, return 500.
      *
@@ -77,7 +78,49 @@ public class InventoryService {
 
         } catch(Exception e) {
             return Response.serverError()
-                    .entity("{\"message\": \"An error occurred while fetching armor types\"}").build();
+                    .entity("{\"message\": \"An error occurred while fetching armor types id\"}").build();
+        }
+    }
+
+    /**
+     * Returns all legendary effects and optionally filter by a specific star.
+     * <p>
+     * HTTP status codes:
+     * 200 if legendary effects are found,
+     * 204 if no legendary effects are found.
+     *
+     * <p>
+     *  Exception handling: if a DB error occurs, return 500.
+     *
+     * @return 200 with a list of legendary effects, 204 if no legendary effects are found.
+     */
+    @GET
+    @Path("/legendary-effects")
+    @Produces("application/json")
+    public Response getLegendaryEffects(@QueryParam("star") Integer star) {
+        try {
+            GenericDao<LegendaryEffect> legendaryEffectDao = new GenericDao<>(LegendaryEffect.class);
+            List<LegendaryEffect> legendaryEffects;
+
+            // GET all legendary effects by star tier
+            // ELSE should return all legendary effects
+            if (star != null) {
+                legendaryEffects = legendaryEffectDao.findByPropertyEqual("star", star);
+            } else {
+                legendaryEffects = legendaryEffectDao.getAll();
+            }
+
+            if (legendaryEffects == null || legendaryEffects.isEmpty()) {
+                return Response
+                        .status(Response.Status.NO_CONTENT)
+                        .build();
+            }
+
+            return Response.ok(legendaryEffects).build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while fetching legendary Effects\"}").build();
         }
     }
 
