@@ -26,6 +26,11 @@ public class ArmorType {
     private List<ArmorBaseResistance> baseResistances;
 
     /**
+     * Instantiates a new Armor type.
+     */
+    public ArmorType() {}
+
+    /**
      * Gets id.
      *
      * @return armor type id

@@ -1,5 +1,6 @@
 package edu.matc.inventory.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 /**
@@ -15,6 +16,7 @@ public class ArmorBaseResistance {
     @ManyToOne
     @MapsId("armorTypeId")
     @JoinColumn(name = "armor_type_id")
+    @JsonIgnore
     private ArmorType armorType;
 
     @Column(name = "damage_resistance", nullable = false)
@@ -34,6 +36,8 @@ public class ArmorBaseResistance {
 
     @Column(name = "cryo_resistance", nullable = false)
     private int cryoResistance;
+
+    public ArmorBaseResistance() {}
 
     /**
      * Gets id.
