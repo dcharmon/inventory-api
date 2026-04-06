@@ -252,4 +252,130 @@ public class InventoryService {
                     .entity("{\"message\": \"An error occurred while deleting the armor piece\"}").build();
         }
     }
+
+
+    /**
+     * Returns all loadouts belonging to a specific user.
+     * <p>
+     * HTTP status codes:
+     * 200 if loadouts are found,
+     * 204 if the user has no loadouts,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @return 200 with a list of loadouts, 204 if none found, 404 if user not found
+     */
+    @GET
+    @Path("/users/{userId}/loadouts")
+    @Produces("application/json")
+    public Response getUserLoadouts(@PathParam("userId") int userId) {
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
+            List<Loadout> loadouts = loadoutDao.findByPropertyEqual("user", user);
+
+            if (loadouts == null || loadouts.isEmpty()) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+
+            return Response.ok(loadouts).build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while fetching user loadouts\"}").build();
+        }
+    }
+
+    /**
+     * Adds a new loadout for a user.
+     * <p>
+     * HTTP status codes:
+     * 201 if the loadout was created,
+     * 404 if the user does not exist,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @param loadout the loadout to add
+     * @return 201 with the created loadout, 404 if user not found
+     */
+    @POST
+    @Path("/users/{userId}/loadouts")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response addUserLoadout(@PathParam("userId") int userId, Loadout loadout) {
+        try {
+            GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
+            AppUser user = userDao.getById(userId);
+
+            if (user == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
+                        .build();
+            }
+
+            loadout.setUser(user);
+            GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
+            int id = loadoutDao.insert(loadout);
+            Loadout created = loadoutDao.getById(id);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(created)
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while creating the loadout\"}").build();
+        }
+    }
+
+    /**
+     * Deletes a specific loadout from a user's account.
+     * <p>
+     * HTTP status codes:
+     * 204 if the loadout was deleted,
+     * 404 if the user or loadout does not exist or does not belong to the user,
+     * 500 if a DB error occurs.
+     *
+     * @param userId the user's id
+     * @param id     the loadout id
+     * @return 204 on success, 404 if not found
+     */
+    @DELETE
+    @Path("/users/{userId}/loadouts/{id}")
+    @Produces("application/json")
+    public Response deleteUserLoadout(@PathParam("userId") int userId, @PathParam("id") int id) {
+        try {
+            GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
+            Loadout loadout = loadoutDao.getById(id);
+
+            if (loadout == null || loadout.getUser() == null || loadout.getUser().getUserId() != userId) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"Loadout with id " + id + " not found for user " + userId + "\"}")
+                        .build();
+            }
+
+            loadoutDao.delete(loadout);
+
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .build();
+
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("{\"message\": \"An error occurred while deleting the loadout\"}").build();
+        }
+    }
 }
