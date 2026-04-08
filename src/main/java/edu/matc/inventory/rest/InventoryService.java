@@ -20,9 +20,7 @@ public class InventoryService {
      * HTTP status codes:
      * 200 if armor types are found,
      * 204 if no armor types are found.
-     *
-     * <p>
-     * Exception handling: if a DB error occurs, return 500.
+     * 500 if a DB error occurs.
      *
      * @return 200 with a list of armor types, 204 if no armor types are found
      */
@@ -54,9 +52,7 @@ public class InventoryService {
      * HTTP status codes:
      * 200 if a specific armor type id was found,
      * 404 if a specific armor type id is NOT found.
-     *
-     * <p>
-     * Exception handling: if a DB error occurs, return 500.
+     * 500 if a DB error occurs.
      *
      * @param id armor type id.
      * @return 200 with the armor type, 404 if the armor type is not found.
@@ -90,9 +86,7 @@ public class InventoryService {
      * HTTP status codes:
      * 200 if legendary effects are found,
      * 204 if no legendary effects are found.
-     *
-     * <p>
-     *  Exception handling: if a DB error occurs, return 500.
+     * 500 if a DB error occurs.
      *
      * @return 200 with a list of legendary effects, 204 if no legendary effects are found.
      */
