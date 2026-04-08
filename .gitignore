@@ -6,6 +6,7 @@ target/
 
 ### Sensitive config ###
 hibernate.cfg.xml
+database.properties
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
