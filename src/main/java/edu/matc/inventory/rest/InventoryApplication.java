@@ -4,6 +4,7 @@ import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -30,7 +31,6 @@ public class InventoryApplication extends Application {
                         .title("Fo76 Inventory API")
                         .version("1.0")
                         .description("API for managing Fallout 76 player inventories"));
-
         SwaggerConfiguration config = new SwaggerConfiguration()
                 .openAPI(openAPI)
                 .prettyPrint(true)

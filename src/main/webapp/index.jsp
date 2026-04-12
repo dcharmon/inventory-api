@@ -12,8 +12,10 @@
 <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
 <script>
     window.onload = function() {
+        const pathSegment = window.location.pathname.split('/')[1];
+        const basePath = pathSegment ? '/' + pathSegment : '';
         SwaggerUIBundle({
-            url: "/InventoryAPI_war/api/openapi.json",
+            url: basePath + '/api/openapi.json',
             dom_id: '#swagger-ui',
             presets: [
                 SwaggerUIBundle.presets.apis,
