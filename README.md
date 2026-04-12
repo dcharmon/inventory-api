@@ -21,7 +21,6 @@ The service exposes the following resources and endpoints for managing a player'
 - `armor-types` — reference data for all armor types and their base resistances
 - `legendary-effects` — reference data for all legendary effects by star tier
 - `inventory/armor` — a user's collected armor pieces with legendary effects applied
-- `inventory/pa-frames` — a user's power armor frames and equipped pieces
 - `loadouts` — named gear sets that a user has organized for different playstyles
 
 ### Service Calls
@@ -53,14 +52,14 @@ DELETE /users/{userId}/loadouts/{id}         - delete a loadout
 **Armor Type**
 ```json
 {
-  "armorTypeId": 1,
-  "typeName": "Covert Scout Armor",
-  "weightClass": "Light",
-  "baseResistances": {
-    "ARM":   { "damage": 26, "energy": 26, "radiation": 11, "poison": 14, "fire": 9,  "cryo": 9  },
-    "LEG":   { "damage": 26, "energy": 26, "radiation": 11, "poison": 14, "fire": 9,  "cryo": 9  },
-    "TORSO": { "damage": 52, "energy": 52, "radiation": 22, "poison": 26, "fire": 16, "cryo": 16 }
-  }
+  "id": 1,
+  "typeName": "Arctic Marine Armor",
+  "weightClass": "Sturdy",
+  "baseResistances": [
+    { "slotGroup": "ARM",   "damage": 39, "energy": 33, "radiation": 21, "poison": 14, "fire": 21, "cryo": 39 },
+    { "slotGroup": "LEG",   "damage": 39, "energy": 33, "radiation": 21, "poison": 14, "fire": 21, "cryo": 39 },
+    { "slotGroup": "TORSO", "damage": 71, "energy": 63, "radiation": 39, "poison": 24, "fire": 39, "cryo": 71 }
+  ]
 }
 ```
 
@@ -78,27 +77,28 @@ DELETE /users/{userId}/loadouts/{id}         - delete a loadout
 **User Armor Piece**
 ```json
 {
-  "userArmorPieceId": 1,
-  "armorTypeId": 5,
-  "armorSlotId": 2,
-  "star1Effect": { "legendaryEffectId": 6, "name": "Chameleon" },
-  "star2Effect": null,
-  "star3Effect": null,
-  "star4Effect": null,
-  "createdAt": "2026-04-01T22:33:29Z"
+  "id": 7,
+  "armorType": "Arctic Marine Armor",
+  "weightClass": "Sturdy",
+  "armorSlot": "Left Arm",
+  "createdAt": "2026-04-01T16:24:12",
+  "star1Effect": "Assassin's",
+  "star2Effect": "HazMat",
+  "star3Effect": "Healthy",
+  "star4Effect": null
 }
 ```
 
 **Loadout**
 ```json
 {
-  "loadoutId": 1,
-  "name": "Stealth Build",
-  "notes": "Full covert scout set for sneaking",
-  "armorPieces": [ ],
-  "createdAt": "2026-04-01T22:33:29Z"
+  "id": 1,
+  "name": "Cryo Resist",
+  "notes": "Resists cryo damage.",
+  "createdAt": "2026-04-01T17:06:49"
 }
 ```
+Note: Armor pieces associated with a loadout are not currently included in the response due to circular reference handling. This is planned for a future implementation.
 
 ### Request and Response Formats
 
@@ -108,11 +108,11 @@ All endpoints accept and return **JSON** (`application/json`).
 |--------|-------------|---------------|
 | GET    | None        | JSON          |
 | POST   | JSON        | JSON          |
-| DELETE | None        | JSON (confirmation message) |
+| DELETE | None        | None          |
 
 HTTP status codes used:
-- `200 OK` — successful GET
+- `200 OK` — successful GET with results
 - `201 Created` — successful POST
-- `204 No Content` — successful DELETE
-- `400 Bad Request` — invalid input
-- `404 Not Found` — resource not found
+- `204 No Content` — successful DELETE, or GET with no results found
+- `404 Not Found` — user or resource not found
+- `500 Internal Server Error` — unexpected server or database error

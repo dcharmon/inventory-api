@@ -5,12 +5,14 @@ import edu.matc.inventory.entity.*;
 import edu.matc.inventory.persistence.GenericDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Inventory", description = "Endpoints for managing FO76 player inventories")
 @Path("/inventories")
 public class InventoryService {
 
