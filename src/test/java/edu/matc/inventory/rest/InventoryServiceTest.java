@@ -15,6 +15,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing endpoints using the test database.
+ *
+ */
+
 class InventoryServiceTest extends JerseyTest {
 
     @Override
