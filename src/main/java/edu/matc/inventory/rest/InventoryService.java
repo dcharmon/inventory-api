@@ -3,6 +3,8 @@ package edu.matc.inventory.rest;
 import edu.matc.inventory.dto.UserArmorPieceDto;
 import edu.matc.inventory.entity.*;
 import edu.matc.inventory.persistence.GenericDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Path("/inventories")
 public class InventoryService {
+
+    private static final Logger log = LogManager.getLogger(InventoryService.class);
 
     private GenericDao<UserArmorPiece> userArmorPieceDao = new GenericDao<>(UserArmorPiece.class);
 
@@ -28,19 +32,23 @@ public class InventoryService {
     @Path("/armor-types")
     @Produces("application/json")
     public Response getAllArmorTypes() {
+        log.debug("GET /armor-types called");
         try {
             GenericDao<ArmorType> armorTypeDao = new GenericDao<>(ArmorType.class);
             List<ArmorType> type = armorTypeDao.getAll();
 
             if (type == null || type.isEmpty()) {
+                log.info("No armor types found, returning 204");
                 return Response
                         .status(Response.Status.NO_CONTENT)
                         .build();
             }
 
+            log.debug("Returning {} armor types", type.size());
             return Response.ok(type).build();
 
         } catch (Exception e) {
+            log.error("Error fetching armor types", e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching armor types\"}").build();
         }
@@ -61,20 +69,24 @@ public class InventoryService {
     @Path("/armor-types/{id}")
     @Produces("application/json")
     public Response getSpecificArmorType(@PathParam("id") int id) {
+        log.debug("GET /armor-types/{} called", id);
         try {
             GenericDao<ArmorType> armorTypeDao = new GenericDao<>(ArmorType.class);
             ArmorType type = armorTypeDao.getById(id);
 
             if (type == null) {
+                log.info("Armor type with id {} not found, returning 404", id);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"Armor type with id " + id + " does not exist\"}")
                         .build();
             }
 
+            log.debug("Returning armor type: {}", type.getTypeName());
             return Response.ok(type).build();
 
         } catch(Exception e) {
+            log.error("Error fetching armor type with id {}", id, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching armor types id\"}").build();
         }
@@ -94,6 +106,7 @@ public class InventoryService {
     @Path("/legendary-effects")
     @Produces("application/json")
     public Response getLegendaryEffects(@QueryParam("star") Integer star) {
+        log.debug("GET /legendary-effects called, star filter: {}", star);
         try {
             GenericDao<LegendaryEffect> legendaryEffectDao = new GenericDao<>(LegendaryEffect.class);
             List<LegendaryEffect> legendaryEffects;
@@ -107,14 +120,17 @@ public class InventoryService {
             }
 
             if (legendaryEffects == null || legendaryEffects.isEmpty()) {
+                log.info("No legendary effects found for star filter: {}, returning 204", star);
                 return Response
                         .status(Response.Status.NO_CONTENT)
                         .build();
             }
 
+            log.debug("Returning {} legendary effects", legendaryEffects.size());
             return Response.ok(legendaryEffects).build();
 
         } catch (Exception e) {
+            log.error("Error fetching legendary effects, star filter: {}", star, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching legendary Effects\"}").build();
         }
@@ -136,11 +152,13 @@ public class InventoryService {
     @Path("/users/{userId}/inventory/armor")
     @Produces("application/json")
     public Response getUserArmorPieces(@PathParam("userId") int userId) {
+        log.debug("GET /users/{}/inventory/armor called", userId);
         try {
             GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
             AppUser user = userDao.getById(userId);
 
             if (user == null) {
+                log.info("User with id {} not found, returning 404", userId);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
@@ -150,6 +168,7 @@ public class InventoryService {
             List<UserArmorPiece> pieces = userArmorPieceDao.findByPropertyEqual("user", user);
 
             if (pieces == null || pieces.isEmpty()) {
+                log.info("No armor pieces found for user {}, returning 204", userId);
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
 
@@ -158,9 +177,11 @@ public class InventoryService {
                 dtos.add(new UserArmorPieceDto(piece));
             }
 
+            log.debug("Returning {} armor pieces for user {}", dtos.size(), userId);
             return Response.ok(dtos).build();
 
         } catch (Exception e) {
+            log.error("Error fetching armor pieces for user {}", userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching armor pieces\"}").build();
         }
@@ -183,11 +204,13 @@ public class InventoryService {
     @Consumes("application/json")
     @Produces("application/json")
     public Response addArmorPiece(@PathParam("userId") int userId, UserArmorPiece armorPiece) {
+        log.debug("POST /users/{}/inventory/armor called", userId);
         try {
             GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
             AppUser user = userDao.getById(userId);
 
             if (user == null) {
+                log.info("User with id {} not found, returning 404", userId);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
@@ -197,6 +220,7 @@ public class InventoryService {
             armorPiece.setUser(user);
             int id = userArmorPieceDao.insert(armorPiece);
             UserArmorPiece created = userArmorPieceDao.getById(id);
+            log.info("Inserted new armor piece with id {} for user {}", id, userId);
 
             return Response
                     .status(Response.Status.CREATED)
@@ -204,6 +228,7 @@ public class InventoryService {
                     .build();
 
         } catch (Exception e) {
+            log.error("Error adding armor piece for user {}", userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while adding the armor piece\"}").build();
         }
@@ -225,6 +250,7 @@ public class InventoryService {
     @Path("/users/{userId}/inventory/armor/{id}")
     @Produces("application/json")
     public Response deleteArmorPiece(@PathParam("userId") int userId, @PathParam("id") int id) {
+        log.debug("DELETE /users/{}/inventory/armor/{} called", userId, id);
         try {
             UserArmorPiece piece = userArmorPieceDao.getById(id);
 
@@ -236,12 +262,14 @@ public class InventoryService {
             }
 
             userArmorPieceDao.delete(piece);
+            log.info("Deleted armor piece with id {} for user {}", id, userId);
 
             return Response
                     .status(Response.Status.NO_CONTENT)
                     .build();
 
         } catch (Exception e) {
+            log.error("Error deleting armor piece with id {} for user {}", id, userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while deleting the armor piece\"}").build();
         }
@@ -264,11 +292,13 @@ public class InventoryService {
     @Path("/users/{userId}/loadouts")
     @Produces("application/json")
     public Response getUserLoadouts(@PathParam("userId") int userId) {
+        log.debug("GET /users/{}/loadouts called", userId);
         try {
             GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
             AppUser user = userDao.getById(userId);
 
             if (user == null) {
+                log.info("User with id {} not found, returning 404", userId);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
@@ -279,12 +309,15 @@ public class InventoryService {
             List<Loadout> loadouts = loadoutDao.findByPropertyEqual("user", user);
 
             if (loadouts == null || loadouts.isEmpty()) {
+                log.info("No loadouts found for user {}, returning 204", userId);
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
 
+            log.debug("Returning {} loadouts for user {}", loadouts.size(), userId);
             return Response.ok(loadouts).build();
 
         } catch (Exception e) {
+            log.error("Error fetching loadouts for user {}", userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while fetching user loadouts\"}").build();
         }
@@ -307,11 +340,13 @@ public class InventoryService {
     @Consumes("application/json")
     @Produces("application/json")
     public Response addUserLoadout(@PathParam("userId") int userId, Loadout loadout) {
+        log.debug("POST /users/{}/loadouts called", userId);
         try {
             GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
             AppUser user = userDao.getById(userId);
 
             if (user == null) {
+                log.info("User with id {} not found, returning 404", userId);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"User with id " + userId + " does not exist\"}")
@@ -322,6 +357,7 @@ public class InventoryService {
             GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
             int id = loadoutDao.insert(loadout);
             Loadout created = loadoutDao.getById(id);
+            log.info("Inserted new loadout with id {} for user {}", id, userId);
 
             return Response
                     .status(Response.Status.CREATED)
@@ -329,6 +365,7 @@ public class InventoryService {
                     .build();
 
         } catch (Exception e) {
+            log.error("Error creating loadout for user {}", userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while creating the loadout\"}").build();
         }
@@ -350,11 +387,13 @@ public class InventoryService {
     @Path("/users/{userId}/loadouts/{id}")
     @Produces("application/json")
     public Response deleteUserLoadout(@PathParam("userId") int userId, @PathParam("id") int id) {
+        log.debug("DELETE /users/{}/loadouts/{} called", userId, id);
         try {
             GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
             Loadout loadout = loadoutDao.getById(id);
 
             if (loadout == null || loadout.getUser() == null || loadout.getUser().getUserId() != userId) {
+                log.info("Loadout with id {} not found for user {}, returning 404", id, userId);
                 return Response
                         .status(Response.Status.NOT_FOUND)
                         .entity("{\"message\": \"Loadout with id " + id + " not found for user " + userId + "\"}")
@@ -362,12 +401,14 @@ public class InventoryService {
             }
 
             loadoutDao.delete(loadout);
+            log.info("Deleted loadout with id {} for user {}", id, userId);
 
             return Response
                     .status(Response.Status.NO_CONTENT)
                     .build();
 
         } catch (Exception e) {
+            log.error("Error deleting loadout with id {} for user {}", id, userId, e);
             return Response.serverError()
                     .entity("{\"message\": \"An error occurred while deleting the loadout\"}").build();
         }
