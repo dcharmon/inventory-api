@@ -13,6 +13,7 @@ database.properties
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/runConfigurations/
 *.iws
 *.iml
 *.ipr
@@ -44,3 +45,6 @@ build/
 
 ### resources ###
 src/main/resources/config.properties
+
+### Logs ###
+logs/
