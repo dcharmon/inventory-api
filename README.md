@@ -14,6 +14,15 @@ The service exposes the following resources and endpoints for managing a player'
 
 ---
 
+### User Guide Live API
+
+---
+The API is deployed and accessible at:
+http://inventory-api-fo76-env.eba-kvcd43xn.us-east-2.elasticbeanstalk.com
+
+
+---
+
 ### Resources
 
 ---
