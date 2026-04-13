@@ -1,5 +1,7 @@
 package edu.matc.inventory.rest;
 
+import edu.matc.inventory.dto.LoadoutRequestDto;
+import edu.matc.inventory.dto.LoadoutResponseDto;
 import edu.matc.inventory.dto.UserArmorPieceDto;
 import edu.matc.inventory.entity.*;
 import edu.matc.inventory.persistence.GenericDao;
@@ -316,7 +318,11 @@ public class InventoryService {
             }
 
             log.debug("Returning {} loadouts for user {}", loadouts.size(), userId);
-            return Response.ok(loadouts).build();
+            List<LoadoutResponseDto> dtos = new ArrayList<>();
+            for (Loadout loadout : loadouts) {
+                dtos.add(new LoadoutResponseDto(loadout));
+            }
+            return Response.ok(dtos).build();
 
         } catch (Exception e) {
             log.error("Error fetching loadouts for user {}", userId, e);
@@ -334,14 +340,13 @@ public class InventoryService {
      * 500 if a DB error occurs.
      *
      * @param userId the user's id
-     * @param loadout the loadout to add
      * @return 201 with the created loadout, 404 if user not found
      */
     @POST
     @Path("/users/{userId}/loadouts")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response addUserLoadout(@PathParam("userId") int userId, Loadout loadout) {
+    public Response addUserLoadout(@PathParam("userId") int userId, LoadoutRequestDto request) {
         log.debug("POST /users/{}/loadouts called", userId);
         try {
             GenericDao<AppUser> userDao = new GenericDao<>(AppUser.class);
@@ -355,6 +360,9 @@ public class InventoryService {
                         .build();
             }
 
+            Loadout loadout = new Loadout();
+            loadout.setName(request.getName());
+            loadout.setNotes(request.getNotes());
             loadout.setUser(user);
             GenericDao<Loadout> loadoutDao = new GenericDao<>(Loadout.class);
             int id = loadoutDao.insert(loadout);
