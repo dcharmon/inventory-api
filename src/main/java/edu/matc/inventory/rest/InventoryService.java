@@ -8,13 +8,13 @@ import edu.matc.inventory.persistence.GenericDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "Inventory", description = "Endpoints for managing FO76 player inventories")
 @Path("/inventories")
 public class InventoryService {
 
@@ -35,6 +35,7 @@ public class InventoryService {
     @GET
     @Path("/armor-types")
     @Produces("application/json")
+    @Operation(tags = {"Armor Types"})
     public Response getAllArmorTypes() {
         log.debug("GET /armor-types called");
         try {
@@ -72,6 +73,7 @@ public class InventoryService {
     @GET
     @Path("/armor-types/{id}")
     @Produces("application/json")
+    @Operation(tags = {"Armor Types"})
     public Response getSpecificArmorType(@PathParam("id") int id) {
         log.debug("GET /armor-types/{} called", id);
         try {
@@ -109,6 +111,7 @@ public class InventoryService {
     @GET
     @Path("/legendary-effects")
     @Produces("application/json")
+    @Operation(tags = {"Legendary Effects"})
     public Response getLegendaryEffects(@QueryParam("star") Integer star) {
         log.debug("GET /legendary-effects called, star filter: {}", star);
         try {
@@ -155,6 +158,7 @@ public class InventoryService {
     @GET
     @Path("/users/{userId}/inventory/armor")
     @Produces("application/json")
+    @Operation(tags = {"User Armor"})
     public Response getUserArmorPieces(@PathParam("userId") int userId) {
         log.debug("GET /users/{}/inventory/armor called", userId);
         try {
@@ -207,6 +211,7 @@ public class InventoryService {
     @Path("/users/{userId}/inventory/armor")
     @Consumes("application/json")
     @Produces("application/json")
+    @Operation(tags = {"User Armor"})
     public Response addArmorPiece(@PathParam("userId") int userId, UserArmorPiece armorPiece) {
         log.debug("POST /users/{}/inventory/armor called", userId);
         try {
@@ -253,6 +258,7 @@ public class InventoryService {
     @DELETE
     @Path("/users/{userId}/inventory/armor/{id}")
     @Produces("application/json")
+    @Operation(tags = {"User Armor"})
     public Response deleteArmorPiece(@PathParam("userId") int userId, @PathParam("id") int id) {
         log.debug("DELETE /users/{}/inventory/armor/{} called", userId, id);
         try {
@@ -295,6 +301,7 @@ public class InventoryService {
     @GET
     @Path("/users/{userId}/loadouts")
     @Produces("application/json")
+    @Operation(tags = {"Loadouts"})
     public Response getUserLoadouts(@PathParam("userId") int userId) {
         log.debug("GET /users/{}/loadouts called", userId);
         try {
@@ -346,6 +353,7 @@ public class InventoryService {
     @Path("/users/{userId}/loadouts")
     @Consumes("application/json")
     @Produces("application/json")
+    @Operation(tags = {"Loadouts"})
     public Response addUserLoadout(@PathParam("userId") int userId, LoadoutRequestDto request) {
         log.debug("POST /users/{}/loadouts called", userId);
         try {
@@ -396,6 +404,7 @@ public class InventoryService {
     @DELETE
     @Path("/users/{userId}/loadouts/{id}")
     @Produces("application/json")
+    @Operation(tags = {"Loadouts"})
     public Response deleteUserLoadout(@PathParam("userId") int userId, @PathParam("id") int id) {
         log.debug("DELETE /users/{}/loadouts/{} called", userId, id);
         try {
