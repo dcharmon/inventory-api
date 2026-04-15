@@ -15,6 +15,12 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * REST service for managing inventory-related resources, including
+ * armor types, legendary effects, user armor pieces, and loadouts.
+ *
+ * Provides endpoints for retrieving and modifying inventory data.
+ */
 @Path("/inventories")
 public class InventoryService {
 

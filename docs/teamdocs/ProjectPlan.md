@@ -15,32 +15,32 @@
 - [x] Complete the rest of this plan
 
 ## Week 10
-- [ ] Complete Branching Activity
-- [ ] Create project structure (packages: entity, dao, service, resource)
-- [ ] Design and finalize database schema (ERD)
-- [ ] Create database and tables
-- [ ] Create Hibernate configuration
-- [ ] Create entity classes
-- [ ] Implement GenericDao 
-- [ ] Create DAO classes for each entity
-- [ ] Write DAO tests 
-- [ ] Verify database CRUD operations working
+- [x] Complete Branching Activity
+- [x] Create project structure (packages: entity, dao, service, resource)
+- [x] Design and finalize database schema (ERD)
+- [x] Create database and tables
+- [x] Create Hibernate configuration
+- [x] Create entity classes
+- [x] Implement GenericDao 
+- [x] Create DAO classes for each entity
+- [x] Write DAO tests 
+- [x] Verify database CRUD operations working
 
 
 
 ## Week 11
-- [ ] Create REST resources
-- [ ] Implement endpoints:
-    - [ ] GET items
-    - [ ] GET item by id
-    - [ ] GET items by user id
-    - [ ] POST item
-    - [ ] PUT item
-    - [ ] DELETE item
-- [ ] Return JSON responses
-- [ ] Test endpoints
-- [ ] Handle basic validation/errors
-- [ ] Polishing and confirming all best practices - javadoc, clean code, DRY, KISS, proper restful resource naming, etc.
+- [x] Create REST resources
+- [x] Implement endpoints:
+    - [x] GET items
+    - [x] GET item by id
+    - [x] GET items by user id
+    - [x] POST item
+    - [x] PUT item
+    - [x] DELETE item
+- [x] Return JSON responses
+- [x] Test endpoints
+- [x] Handle basic validation/errors
+- [x] Polishing and confirming all best practices - javadoc, clean code, DRY, KISS, proper restful resource naming, etc.
 
 ## Week 12
 - [x] Team Project Presentation
