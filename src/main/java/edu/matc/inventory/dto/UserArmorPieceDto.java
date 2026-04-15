@@ -5,7 +5,9 @@ import edu.matc.inventory.entity.UserArmorPiece;
 import java.time.LocalDateTime;
 
 /**
- * The type User armor piece dto.
+ * Data Transfer Object representing a user's armor piece.
+ * Used in REST responses to expose armor piece details
+ * without exposing the full entity.
  */
 public class UserArmorPieceDto {
 
@@ -20,11 +22,10 @@ public class UserArmorPieceDto {
     private String star4Effect;
 
     /**
-     * Instantiates a new User armor piece dto.
+     * Constructs a DTO from a UserArmorPiece entity.
      *
-     * @param piece the piece
+     * @param piece the entity to convert
      */
-
     public UserArmorPieceDto(UserArmorPiece piece) {
         this.id = piece.getId();
         this.armorType = piece.getArmorType().getTypeName();

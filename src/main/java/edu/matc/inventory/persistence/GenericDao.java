@@ -58,6 +58,7 @@ public class GenericDao<T> {
      * corresponding to new entry row.
      *
      * @param entity entity to be inserted
+     * @return the generated id of the inserted entity
      */
     public int insert(T entity) {
         return executeWithSession(session -> {
